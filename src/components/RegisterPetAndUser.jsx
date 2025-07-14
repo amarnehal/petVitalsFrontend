@@ -26,7 +26,7 @@ const RegisterPetAndUser = () => {
       const userData = await vetService.registerUserPet(data);
       if (userData) {
         dispatch(createUserAndPetInfo(userData));
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (error) {
       setError(error.message || "Failed to register Pet and User");
