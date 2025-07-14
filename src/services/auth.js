@@ -14,7 +14,12 @@ class AuthService {
   ////// registeration ////
   async registerUser(data) {
     try {
-      const res = await this.api.post("/user/register", data);
+      const res = await this.api.post("/user/register", data,{
+        withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      })
       if (res.status === 201) {
         return res.data;
       } else {
@@ -29,7 +34,14 @@ class AuthService {
   async loginUser(data) {
     
     try {
-      const res = await this.api.post("/user/login", data);
+      const res = await this.api.post("/user/login", data,{
+        withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      });
+      console.log("Headers ---",headers);
+      
       console.log("here is the res data",res.data);
           
       return res.data;
