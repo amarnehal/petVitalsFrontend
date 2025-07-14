@@ -71,9 +71,11 @@ const RegisterPetAndUser = () => {
                   required: false,
                   validate: {
                     matchPattern: (value) =>
+                      !value ||
                       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
                         value
-                      ) || "Email must be a valid address",
+                      ) ||
+                      "Email must be a valid address",
                   },
                 })}
               />
@@ -90,9 +92,11 @@ const RegisterPetAndUser = () => {
                   required: false,
                   validate: {
                     matchPattern: (value) =>
+                      !value ||
                       /^(\+?\d{1,4}[\s\-]?)?(\(?\d{1,3}\)?[\s\-]?)?(\d{1,4}[\s\-]?\d{1,4}[\s\-]?\d{1,4})$/.test(
                         value
-                      ) || "Phone number must be valid",
+                      ) ||
+                      "Phone number must be valid",
                   },
                 })}
               />
