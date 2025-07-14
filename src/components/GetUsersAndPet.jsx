@@ -77,7 +77,7 @@ const GetUsersAndPet = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#EAE6F0] from-gray-50 to-gray-100 py-12">
+    <div className="min-h-screen from-gray-50 to-gray-100 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* <h1 className="text-2xl font-extrabold text-center text-gray-900 mb-4">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#5063A9] to-purple-600">

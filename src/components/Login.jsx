@@ -60,7 +60,7 @@ const Login = () => {
                 placeholder="Enter your Email"
                 type="email"
                 {...register("email", {
-                  required: true,
+                  required: "Email is required",
                   validate: {
                     matchPatern: (value) =>
                       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
@@ -76,7 +76,7 @@ const Login = () => {
                 placeholder="Enter your password here"
                 type="password"
                 {...register("password", {
-                  required: true,
+                  required: "Password is required",
                 })}
               />
             </div>

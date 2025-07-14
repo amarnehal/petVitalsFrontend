@@ -7,15 +7,15 @@ const Footer = () => {
         </p>
 
         <div className="flex space-x-4">
-          <a href="/privacy" className="hover:text-blue-600 transition-colors">
+          <h3  className="hover:text-blue-600 transition-colors">
             Privacy Policy
-          </a>
-          <a href="/terms" className="hover:text-blue-600 transition-colors">
+          </h3>
+          <h3  className="hover:text-blue-600 transition-colors">
             Terms of Service
-          </a>
-          <a href="/contact" className="hover:text-blue-600 transition-colors">
+          </h3>
+          <h3 className="hover:text-blue-600 transition-colors">
             Contact
-          </a>
+          </h3>
         </div>
       </div>
     </footer>

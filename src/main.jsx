@@ -21,12 +21,14 @@ import VetProfilePage from './pages/dashboard/VetProfilePage.jsx'
 import VetMedicalInfoPage from './pages/dashboard/VetMedicalInfoPage.jsx'
 import UpdateVetPage from './pages/dashboard/UpdateVetPage.jsx'
 import UpdateVetMedicalInfoPage from './pages/dashboard/UpdateVetMedicalInfoPage.jsx';
+import NotFoundPage from "./components/NotFound.jsx"
 
 // Router configuration using createBrowserRouter for react-router-dom v7.x
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <NotFoundPage />, 
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/login", element: <LogInPage /> },
@@ -50,7 +52,8 @@ const router = createBrowserRouter([
         { path: "vet-medicalInfo", element: <VetMedicalInfoPage /> },
         { path: "pet/:id", element: <PetMedicalPage /> },
         { path: "update/vet-base-profile", element: <UpdateVetPage /> },
-        {path:"update/vet-info-profile", element:<UpdateVetMedicalInfoPage/>}
+        {path:"update/vet-info-profile", element:<UpdateVetMedicalInfoPage/>},
+        { path: "*", element: <NotFoundPage /> }
       ],
     },
   ],

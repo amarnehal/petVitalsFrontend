@@ -13,7 +13,6 @@ const VetProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log("👌👌👌👌user data", userData.id);
 
   // Fetch vet medical info on mount if user is vet
   useEffect(() => {
