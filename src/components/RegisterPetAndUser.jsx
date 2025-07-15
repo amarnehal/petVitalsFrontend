@@ -1,35 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import vetService from "../services/vet";
 import { createUserAndPetInfo } from "../store/petSlice";
 import Input from "./Input";
 import Button from "./Button";
-import toast from "react-hot-toast";
 
 const RegisterPetAndUser = () => {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm();
 
-  const registerUserAndPetByVet = async function (data) {
+  const registerUserAndPetByVet = async (data) => {
     setError("");
+    setLoading(true);
     try {
       const userData = await vetService.registerUserPet(data);
       if (userData) {
         dispatch(createUserAndPetInfo(userData));
         navigate("/dashboard");
       }
-    } catch (error) {
-      setError(error.message || "Failed to register Pet and User");
+    } catch (err) {
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to register Pet and User";
+      setError(message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,7 +69,13 @@ const RegisterPetAndUser = () => {
                   {errors.userName.message}
                 </p>
               )}
+              {error.toLowerCase().includes("username") && (
+                <p className="text-red-600 text-xs">
+                  This username is already taken.
+                </p>
+              )}
             </div>
+
             <div>
               <Input
                 label="Email"
@@ -82,7 +96,13 @@ const RegisterPetAndUser = () => {
               {errors.email && (
                 <p className="text-red-600 text-xs">{errors.email.message}</p>
               )}
+              {error.toLowerCase().includes("email") && (
+                <p className="text-red-600 text-xs">
+                  This email is already registered.
+                </p>
+              )}
             </div>
+
             <div>
               <Input
                 label="Phone Number"
@@ -105,6 +125,11 @@ const RegisterPetAndUser = () => {
                   {errors.phoneNumber.message}
                 </p>
               )}
+              {error.toLowerCase().includes("phone") && (
+                <p className="text-red-600 text-xs">
+                  This phone number is already registered.
+                </p>
+              )}
             </div>
 
             {/* Pet Information */}
@@ -119,6 +144,7 @@ const RegisterPetAndUser = () => {
                 <p className="text-red-600 text-xs">{errors.petName.message}</p>
               )}
             </div>
+
             <div>
               <Input
                 label="Pet Age"
@@ -142,7 +168,6 @@ const RegisterPetAndUser = () => {
               )}
             </div>
 
-            {/* Pet Gender */}
             <div>
               <label htmlFor="petGender" className="block text-gray-700">
                 Pet Gender:
@@ -154,6 +179,7 @@ const RegisterPetAndUser = () => {
                 })}
                 className="w-full mt-2 p-2 border border-gray-300 rounded-md"
               >
+                <option value="">--Select--</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
@@ -164,7 +190,6 @@ const RegisterPetAndUser = () => {
               )}
             </div>
 
-            {/* Pet Type */}
             <div>
               <label htmlFor="petType" className="block text-gray-700">
                 Pet Type:
@@ -174,6 +199,7 @@ const RegisterPetAndUser = () => {
                 {...register("petType", { required: "Pet type is required" })}
                 className="w-full mt-2 p-2 border border-gray-300 rounded-md"
               >
+                <option value="">--Select--</option>
                 <option value="Dog">Dog</option>
                 <option value="Cat">Cat</option>
               </select>
@@ -181,8 +207,9 @@ const RegisterPetAndUser = () => {
                 <p className="text-red-600 text-xs">{errors.petType.message}</p>
               )}
             </div>
-            <Button type="submit" className="w-full">
-              Submit
+
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Submitting..." : "Submit"}
             </Button>
           </div>
         </form>

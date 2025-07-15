@@ -8,6 +8,7 @@ class Vet {
       withCredentials: true, //
     });
   }
+  
 
   //// user and pet registeration by vet ////
   async registerUserPet(data) {
@@ -18,7 +19,7 @@ class Vet {
 
       return res.data;
     } catch (error) {
-      console.log("Error occured while registring pet and the user",error);
+      console.log("Error occured while registring pet and the user",error.message);
       const msg = error.response?.data?.message || "Failed to create user and Pet "
       throw new Error(msg);
     }
