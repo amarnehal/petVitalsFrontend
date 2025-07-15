@@ -40,7 +40,6 @@ class AuthService {
         "Content-Type": "application/json",
       },
       });
-      console.log("Headers ---",headers);
       
       console.log("here is the res data",res.data);
           
