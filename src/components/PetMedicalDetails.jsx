@@ -12,6 +12,7 @@ const PetMedicalDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [removing, setRemoving] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const PetMedicalDetails = () => {
     fetchPetDetails();
   }, [dispatch, id]);
 
-  const handleRemovePet = async () => {
+ const handleRemovePet = async () => {
   const confirmed = window.confirm(
     "Are you sure you want to remove this pet? This action cannot be undone."
   );
@@ -50,14 +51,26 @@ const PetMedicalDetails = () => {
 
   try {
     setRemoving(true);
-    console.log("remove pet id", id);
+    setMessage({ type: "", text: "" });
 
-    await petService.removePet(id);
-    dispatch(removePet(id));
-    alert("Pet successfully removed.");
-    navigate("/dashboard");
+    await petService.removePet(id); // call your service
+    dispatch(removePet(id)); // update redux store
+
+    setMessage({
+      type: "success",
+      text: "Pet profile removed successfully. Redirecting to dashboard...",
+    });
+
+    // Redirect after 2 seconds
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 2000);
   } catch (err) {
-    alert(`Error removing pet: ${err.message}`);
+    setMessage({
+      type: "error",
+      text:
+        err?.response?.data?.message || err.message || "Failed to remove pet",
+    });
   } finally {
     setRemoving(false);
   }
@@ -117,6 +130,19 @@ const PetMedicalDetails = () => {
   }
 
   return (
+    <>
+      {message.text && (
+      <div
+        className={`text-center mb-4 p-4 rounded-lg font-semibold ${
+          message.type === "success"
+            ? "bg-green-100 text-green-700"
+            : "bg-red-100 text-red-700"
+        }`}
+      >
+        {message.text}
+      </div>
+    )}
+  
     <div className="container mx-auto px-4 py-10 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8">
         <header className="text-center mb-10">
@@ -238,6 +264,7 @@ const PetMedicalDetails = () => {
         </div>
       </div>
     </div>
+      </>
   );
 };
 
