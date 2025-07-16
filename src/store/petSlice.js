@@ -44,12 +44,18 @@ const petSlice = createSlice({
     },
     removePet(state, action) {
       const petIdToRemove = action.payload;
-      state.petBasicInfo = state.petBasicInfo.filter(
-        (pet) => pet.id !== petIdToRemove
-      );
-      state.petMedicalInfo = state.petMedicalInfo.filter(
-        (info) => info.petId !== petIdToRemove
-      );
+
+      if (Array.isArray(state.petBasicInfo)) {
+        state.petBasicInfo = state.petBasicInfo.filter(
+          (pet) => pet.id !== petIdToRemove
+        );
+      }
+
+      if (Array.isArray(state.petMedicalInfo)) {
+        state.petMedicalInfo = state.petMedicalInfo.filter(
+          (info) => info.petId !== petIdToRemove
+        );
+      }
     },
   },
 });
