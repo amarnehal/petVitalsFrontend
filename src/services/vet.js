@@ -28,7 +28,12 @@ class Vet {
   ////users-with-pets /// get all info about users and pets
   async getAllUsersAndPets() {
     try {
-      const res = await this.api.get("/vet/users-with-pets");
+      const res = await this.api.get("/vet/users-with-pets",{
+         withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      });
       return res.data;
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to get owner and the pet details "
