@@ -7,7 +7,6 @@ import authService from "../services/auth";
 import Input from "../components/Input";
 import Button from "./Button";
 
-
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -16,30 +15,47 @@ const Login = () => {
 
   const auth = useSelector((state) => state.auth);
 
- const loginHandler = async (data) => {
-  setErrors("");
+  const loginHandler = async (data) => {
+    setErrors("");
 
-  try {
-    const session = await authService.loginUser(data);
+    try {
+      const session = await authService.loginUser(data);
 
-    if (session?.data?.user && session?.data?.accessToken) {
-      dispatch(storeLogin({
-        userData: session.data.user,
-        role: session.data.user.role,
-        token: session.data.accessToken,    // ✅ Include token if available
-      }));
-      reset();
-      setErrors("");
-      navigate("/dashboard");
-    } else {
-      setErrors("Invalid login response.");
+      const { user, accessToken } = session.data || {};
+
+      console.log("User in login and accessToken in Login Front end",user,accessToken)
+      if (user && accessToken) {
+        dispatch(
+          storeLogin({
+            userData: user,
+            role: user.role,
+            token: accessToken,
+          }),
+        );
+
+        reset();
+        navigate("/dashboard");
+      } else {
+        setErrors("Invalid login response.");
+      }
+
+      // if (session?.data?.user && session?.data?.accessToken) {
+      //   dispatch(storeLogin({
+      //     userData: session.data.user,
+      //     role: session.data.user.role,
+      //     token: session.data.accessToken,    // ✅ Include token if available
+      //   }));
+      //   reset();
+      //   setErrors("");
+      //   navigate("/dashboard");
+      // } else {
+      //   setErrors("Invalid login response.");
+      // }
+    } catch (error) {
+      console.error(error);
+      setErrors(error.message || "Login failed. Please try again.");
     }
-  } catch (error) {
-    console.error(error);
-    setErrors(error.message || "Login failed. Please try again.");
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -64,7 +80,7 @@ const Login = () => {
                   validate: {
                     matchPatern: (value) =>
                       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-                        value
+                        value,
                       ) || "Email must be a valid address",
                   },
                 })}

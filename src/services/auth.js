@@ -1,4 +1,5 @@
 import axios from "axios";
+import { store } from "../store/store";
 
 console.log("ENV enviornment", import.meta.env.VITE_API_BASE_URL);
 
@@ -9,6 +10,20 @@ class AuthService {
       baseURL: this.baseUrl,
       withCredentials: true,
     });
+
+    this.api.interceptors.request.use(
+      (config) => {
+        const state = store.getState();
+        const token = state.auth.token;
+
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+
+        return config;
+      },
+      (error) => Promise.reject(error),
+    );
   }
 
   ////// registeration ////
@@ -33,12 +48,7 @@ class AuthService {
   ///// login function ////
   async loginUser(data) {
     try {
-      const res = await this.api.post("/user/login", data, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await this.api.post("/user/login", data,);
 
       console.log("here is the res data", res.data);
 
@@ -61,10 +71,7 @@ class AuthService {
   //// get user profile //////
   async getUserProfile() {
     try {
-      const res = await this.api.get("/user/getuser", {
-        withCredentials: true, // for cookie-based auth
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const res = await this.api.get("/user/getuser");
       return res.data;
     } catch (error) {
       console.log("error ocurrent in getting user Profile ------", error);
