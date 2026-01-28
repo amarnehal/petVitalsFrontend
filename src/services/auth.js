@@ -1,6 +1,6 @@
 import axios from "axios";
 
-console.log("ENV enviornment",import.meta.env.VITE_API_BASE_URL);
+console.log("ENV enviornment", import.meta.env.VITE_API_BASE_URL);
 
 class AuthService {
   constructor() {
@@ -14,12 +14,12 @@ class AuthService {
   ////// registeration ////
   async registerUser(data) {
     try {
-      const res = await this.api.post("/user/register", data,{
+      const res = await this.api.post("/user/register", data, {
         withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      })
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (res.status === 201) {
         return res.data;
       } else {
@@ -30,19 +30,18 @@ class AuthService {
     }
   }
 
-   ///// login function ////
+  ///// login function ////
   async loginUser(data) {
-    
     try {
-      const res = await this.api.post("/user/login", data,{
+      const res = await this.api.post("/user/login", data, {
         withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      
-      console.log("here is the res data",res.data);
-          
+
+      console.log("here is the res data", res.data);
+
       return res.data;
     } catch (error) {
       throw new Error(error?.response?.data?.message || error.message);
@@ -62,18 +61,23 @@ class AuthService {
   //// get user profile //////
   async getUserProfile() {
     try {
-      const res = await this.api.get("/user/getuser");
+      const res = await this.api.get("/user/getuser", {
+        withCredentials: true, // for cookie-based auth
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       return res.data;
     } catch (error) {
-      console.log("error ocurrent in getting user Profile ------",error);
-      
+      console.log("error ocurrent in getting user Profile ------", error);
+
       throw new Error(error?.response?.data?.message || error.message);
     }
   }
 
   async resetPassword(token, password) {
     try {
-      const res = await this.api.post(`/user/resetpassword/${token}`, { password });
+      const res = await this.api.post(`/user/resetpassword/${token}`, {
+        password,
+      });
       return res.data;
     } catch (error) {
       throw new Error(error?.response?.data?.message || error.message);
@@ -94,8 +98,8 @@ class AuthService {
   async logOut() {
     try {
       const res = await this.api.get("/user/logout");
-      console.log("res.data from log out",res.data);
-      
+      console.log("res.data from log out", res.data);
+
       return res.data;
     } catch (error) {
       throw new Error(error?.response?.data?.message || error.message);
@@ -106,7 +110,9 @@ class AuthService {
 
   async claimAccount(token, newPassword) {
     try {
-      const res = await this.api.post(`/claim-account/${token}`, { newPassword });
+      const res = await this.api.post(`/claim-account/${token}`, {
+        newPassword,
+      });
       return res.data;
     } catch (error) {
       throw new Error(error?.response?.data?.message || error.message);
