@@ -5,7 +5,7 @@ console.log("ENV enviornment", import.meta.env.VITE_API_BASE_URL);
 
 class AuthService {
   constructor() {
-    this.baseUrl = import.meta.env.VITE_API_BASE_URL;
+     this.baseUrl = import.meta.env.VITE_API_BASE_URL || "https://sunamvet.shop";
     this.api = axios.create({
       baseURL: this.baseUrl,
       withCredentials: true,
