@@ -43,7 +43,7 @@ class Pet {
     }
   }
   ///// pet medical info creation //////
-  async createPetMedicalInfo(petId, data) {
+  async createPetMedicalInfo(petId, data, onUploadProgress) {
     console.log(
       "pet Id ,And Pet Data from service layer medical record ❤️❤️❤️",
       petId,
@@ -51,7 +51,19 @@ class Pet {
     );
 
     try {
-      const response = await this.api.post(`/pet/medicalinfo/${petId}`, data);
+      const response = await this.api.post(`/pet/medicalinfo/${petId}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          if (onUploadProgress && progressEvent.total) {
+            const progressCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            onUploadProgress(progressCompleted);
+          }
+        }
+      });
       console.log("Direct response from service", response);
 
       return response.data;
